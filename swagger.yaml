@@ -29,14 +29,7 @@ paths:
               content:
                 application/json:
                   schema:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        descricao:
-                          type: string
+                      $ref: "#/components/schemas/Especialidades"
       post:
         summary: "Cria uma nova especialidade."
         description: "Através desse endepoint, é possivel criar novas especialidades."
@@ -54,10 +47,7 @@ paths:
             content:
               application/json: 
                 schema:
-                  type: object
-                  properties:
-                    descricao:
-                      type: string
+                    $ref: "#/components/schemas/Especialidade"
   /especialidades/{id}:
     parameters:
       - name: id
@@ -67,26 +57,37 @@ paths:
           type: integer
     get:
       summary: "Recupera uma entidade pelo ID."
-      parameters:
-      - name: id
-        required: true
-        in: path
-        schema:
-          type: integer
       responses:
         200:
           description: "Sucesso."
           content:
-            application/json: 
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  descricao:
-                    type: string
+              application/json: 
+                schema:
+                    $ref: "#/components/schemas/Especialidade"
         404:
           description: "Especialidade não encontrada."
           content: 
             application/json: 
               example: "Not Found"
+security: 
+  - auth: []
+components:
+  schemas:
+    Especialidade:
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        descricao:
+          type: string
+          format: date-time "dd/MM/YYYY 00:00:00"
+    Especialidades:
+      type: array
+      items:
+        $ref: "#/components/schemas/Especialidade"
+  securitySchemes: 
+    auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
